@@ -1,0 +1,3 @@
+if($conn) { 
+echo "brhasil"
+}
