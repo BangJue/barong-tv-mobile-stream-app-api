@@ -1,5 +1,5 @@
 <?php
-// File: change_password.php
+
 error_reporting(0);
 ini_set('display_errors', 0);
 
@@ -16,13 +16,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit();
     }
 
-    // 1. Cek Password Lama (Biasa, tanpa Hash)
     $cek = mysqli_query($con, "SELECT password FROM users WHERE id = '$user_id'");
     $row = mysqli_fetch_assoc($cek);
 
     if ($row) {
         if ($old_password == $row['password']) {
-            // 2. Update Password Baru (Simpan Biasa)
+            
             $update = mysqli_query($con, "UPDATE users SET password = '$new_password' WHERE id = '$user_id'");
             
             if ($update) {

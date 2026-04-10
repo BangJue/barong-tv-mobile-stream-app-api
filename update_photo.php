@@ -1,5 +1,5 @@
 <?php
-// File: update_photo.php
+
 error_reporting(0);
 ini_set('display_errors', 0);
 
@@ -8,10 +8,7 @@ header('Content-Type: application/json');
 
 $response = array();
 
-// GANTI IP INI SESUAI IP KOMPUTER KAMU JIKA PAKAI HP (misal: 192.168.1.5)
-// JANGAN PAKAI localhost jika tes di HP asli.
-// Pastikan folder "uploads" ada di samping file ini.
-$base_url = "http://192.168.1.11/API_FILM_ULTIMATE/uploads/"; 
+$base_url = "http://(Your IP / HOST)/API_FILM_ULTIMATE/uploads/"; 
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $user_id = $_POST['user_id'] ?? '';

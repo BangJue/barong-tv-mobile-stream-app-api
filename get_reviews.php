@@ -1,5 +1,5 @@
 <?php
-// File: get_reviews.php (VERSI BARU DENGAN SISTEM BALASAN)
+
 header('Content-Type: application/json');
 require_once('koneksi.php');
 
@@ -16,8 +16,6 @@ if ($movie_id === 0) {
     exit();
 }
 
-// 1. Ambil semua komentar UTAMA (parent_id = 0)
-// Kita juga filter agar entri yang hanya berisi rating (comment is NULL) tidak ikut terambil
 $query_main = "SELECT r.id, r.user_rating, r.comment, r.created_at, u.name as user_name, u.photo_url as user_photo 
                FROM reviews r 
                JOIN users u ON r.user_id = u.id 
@@ -33,12 +31,12 @@ $reviews = [];
 while ($row_main = mysqli_fetch_assoc($result_main)) {
     $comment_id = $row_main['id'];
     
-    // 2. Untuk setiap komentar utama, ambil semua BALASAN-nya
+    
     $query_replies = "SELECT r.id, r.comment, r.created_at, u.name as user_name, u.photo_url as user_photo 
                       FROM reviews r 
                       JOIN users u ON r.user_id = u.id 
                       WHERE r.parent_id = ?
-                      ORDER BY r.created_at ASC"; // Balasan diurutkan dari yang terlama
+                      ORDER BY r.created_at ASC"; 
 
     $stmt_replies = mysqli_prepare($con, $query_replies);
     mysqli_stmt_bind_param($stmt_replies, "i", $comment_id);
@@ -50,7 +48,7 @@ while ($row_main = mysqli_fetch_assoc($result_main)) {
         $replies[] = $row_reply;
     }
     
-    // 3. Masukkan array balasan ke dalam data komentar utama
+    
     $row_main['replies'] = $replies;
     $reviews[] = $row_main;
 }

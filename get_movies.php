@@ -2,7 +2,7 @@
 
 
 require_once('koneksi.php');
-require_once('helpers.php'); // Asumsi sendResponse() ada di sini
+require_once('helpers.php'); 
 
 if (!$con) {
     sendResponse(false, 'Koneksi DB Gagal');
@@ -30,23 +30,23 @@ $base_query = "
 
 $where_clauses = [];
 
-// Filter berdasarkan ID (untuk laman Detail)
+
 if (isset($_GET['id'])) {
     $where_clauses[] = "m.id = ?";
     $params[] = $_GET['id'];
     $types .= 'i';
 }
 
-// Tambahkan filter lain jika ada (misal: category, genre, search)
-// Contoh: if (isset($_GET['category_id'])) { ... }
 
-// Gabungkan semua kondisi WHERE
+
+
+
 if (!empty($where_clauses)) {
     $base_query .= " WHERE " . implode(' AND ', $where_clauses);
 }
 
-// Tambahkan ORDER BY jika perlu
-$base_query .= " LIMIT 25"; // Batasi hasil untuk performa
+
+$base_query .= " LIMIT 25"; 
 
 $stmt = mysqli_prepare($con, $base_query);
 
@@ -60,10 +60,10 @@ if ($stmt) {
     
     $movies = [];
     while ($row = mysqli_fetch_assoc($result)) {
-        // Casting tipe data agar konsisten
+        
         $row['id'] = (string)$row['id'];
         $row['rating'] = (float)$row['rating'];
-        $row['rating_count'] = (int)$row['rating_count']; // <-- PASTIKAN INI ADA
+        $row['rating_count'] = (int)$row['rating_count']; 
         $row['view_count'] = (int)$row['view_count'];
         $row['is_vip'] = (bool)$row['is_vip'];
         $movies[] = $row;

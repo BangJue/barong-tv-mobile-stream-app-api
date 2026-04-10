@@ -1,12 +1,8 @@
 <?php
-// FILE: download_manager.php
-
-// 1. Matikan Error HTML agar JSON bersih
 error_reporting(0);
 ini_set('display_errors', 0);
 header('Content-Type: application/json; charset=utf-8');
 
-// 2. Koneksi
 require_once('koneksi.php');
 
 if (!$con) {
@@ -14,12 +10,11 @@ if (!$con) {
     exit();
 }
 
-// 3. Ambil Parameter (POST)
 $action = isset($_POST['action']) ? $_POST['action'] : '';
 $user_id = isset($_POST['user_id']) ? $_POST['user_id'] : '';
 $movie_id = isset($_POST['movie_id']) ? $_POST['movie_id'] : '';
 
-// --- LOGIKA UTAMA ---
+
 
 if ($action == 'get_all') {
     if (empty($user_id)) {
@@ -27,8 +22,6 @@ if ($action == 'get_all') {
         exit();
     }
 
-    // QUERY: Gabungkan tabel downloads dan movies
-    // Kita urutkan berdasarkan d.created_at (Sesuai struktur DB kamu)
     $query = "SELECT 
                 m.id, 
                 m.title, 
@@ -62,7 +55,7 @@ if ($action == 'get_all') {
                 'id' => (string)$row['id'],
                 'title' => $row['title'],
                 'description' => $row['description'],
-                // Kirim 2 versi key (CamelCase & SnakeCase) biar aman
+                
                 'posterUrl' => $row['poster_url'],
                 'poster_url' => $row['poster_url'],
                 'bannerUrl' => $row['banner_url'],
@@ -89,7 +82,7 @@ elseif ($action == 'add') {
         exit();
     }
     
-    // Cek Duplikat
+    
     $check = mysqli_query($con, "SELECT id FROM downloads WHERE user_id='$user_id' AND movie_id='$movie_id'");
     if (mysqli_num_rows($check) > 0) {
         echo json_encode(['status' => false, 'message' => 'Film ini sudah diunduh sebelumnya.']);
@@ -105,7 +98,7 @@ elseif ($action == 'add') {
     }
 } 
 
-// ... kode add sebelumnya ...
+
 
 elseif ($action == 'remove') {
     if (empty($user_id) || empty($movie_id)) {
@@ -122,7 +115,7 @@ elseif ($action == 'remove') {
     }
 }
 
-// ... else { invalid action } ...
+
 else {
     echo json_encode(['status' => false, 'message' => 'Invalid action']);
 }

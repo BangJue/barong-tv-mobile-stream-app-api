@@ -1,3 +1,0 @@
-if($conn) { 
-echo "brhasil"
-}

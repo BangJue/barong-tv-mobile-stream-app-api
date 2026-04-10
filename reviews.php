@@ -1,14 +1,10 @@
 <?php
-/*
- * File: reviews.php (VERSI FINAL DIPERBAIKI)
- * Fungsi: Mengambil komentar film & Posting komentar baru.
- * Ditingkatkan dengan Prepared Statements untuk keamanan.
- */
+
 
 require_once('koneksi.php');
-require_once('helpers.php'); // WAJIB: Memanggil file yang berisi fungsi sendResponse()
+require_once('helpers.php'); 
 
-// Cek apakah koneksi database berhasil dibuat
+
 if (!$con) {
     sendResponse(false, 'Koneksi ke database gagal. Periksa file koneksi.php');
 }
@@ -22,7 +18,7 @@ switch ($action) {
         }
         $movie_id = $_GET['movie_id'];
         
-        // Ambil data review & data user yang relevan menggunakan JOIN
+        
         $query = "SELECT r.id, r.user_id, r.user_rating, r.comment, r.created_at, u.name, u.photo_url
                   FROM reviews r
                   JOIN users u ON r.user_id = u.id
@@ -30,7 +26,7 @@ switch ($action) {
                   ORDER BY r.created_at DESC";
         
         $stmt = mysqli_prepare($con, $query);
-        mysqli_stmt_bind_param($stmt, "i", $movie_id); // 'i' untuk integer
+        mysqli_stmt_bind_param($stmt, "i", $movie_id); 
         mysqli_stmt_execute($stmt);
         $result = mysqli_stmt_get_result($stmt);
         
@@ -47,7 +43,7 @@ switch ($action) {
             sendResponse(false, 'Metode request salah, seharusnya POST.');
         }
         
-        // Ambil dan validasi input dari POST
+        
         $user_id = isset($_POST['user_id']) ? $_POST['user_id'] : null;
         $movie_id = isset($_POST['movie_id']) ? $_POST['movie_id'] : null;
         $rating = isset($_POST['rating']) ? $_POST['rating'] : null;
@@ -57,13 +53,13 @@ switch ($action) {
             sendResponse(false, 'Parameter user_id, movie_id, dan rating dibutuhkan.');
         }
 
-        // Masukkan review baru menggunakan Prepared Statements
+        
         $query_insert = "INSERT INTO reviews (user_id, movie_id, user_rating, comment) VALUES (?, ?, ?, ?)";
         $stmt_insert = mysqli_prepare($con, $query_insert);
         mysqli_stmt_bind_param($stmt_insert, "iiis", $user_id, $movie_id, $rating, $comment);
         
         if (mysqli_stmt_execute($stmt_insert)) {
-            // Jika berhasil, update rating rata-rata di tabel movies (opsional tapi fitur bagus)
+            
             $stmt_update = mysqli_prepare($con, "UPDATE movies SET rating = (SELECT AVG(user_rating) FROM reviews WHERE movie_id = ?) WHERE id = ?");
             mysqli_stmt_bind_param($stmt_update, "ii", $movie_id, $movie_id);
             mysqli_stmt_execute($stmt_update);

@@ -1,8 +1,5 @@
 <?php
-/*
- * File: get_home.php * PERBAIKAN FINAL v5 - HANYA MENAMBAHKAN DATA UNTUK BANNER/SLIDES.
- * TIDAK ADA YANG DIUBAH ATAU DIHAPUS.
- */
+
 
 require_once('koneksi.php');
 require_once('helpers.php');
@@ -11,7 +8,7 @@ if (!$con) {
     sendResponse(false, 'Koneksi database gagal.');
 }
 
-// BAGIAN 1: FUNGSI getMasterData YANG SUDAH BENAR (TIDAK DIUBAH)
+
 function getMasterData($connection, $tableName, $columnName, $orderBy = 'name ASC') {
     $data = [];
     $query = "SELECT id, $columnName AS name FROM $tableName ORDER BY $orderBy";
@@ -31,7 +28,7 @@ $years = getMasterData($con, 'years', 'name', 'name DESC');
 $statuses = getMasterData($con, 'statuses', 'name');
 
 
-// BAGIAN 2: QUERY DASAR UNTUK FILM (TIDAK DIUBAH)
+
 $base_movie_query = "
     SELECT
         m.*,
@@ -48,12 +45,6 @@ $base_movie_query = "
 ";
 
 
-// BAGIAN 3: MENGAMBIL SEMUA KATEGORI FILM UNTUK MAIN ACTIVITY (TIDAK DIUBAH, HANYA DITAMBAH)
-
-// ##################################################################
-// ## PERBAIKAN: HANYA BLOK INI YANG DITAMBAHKAN ##
-// ##################################################################
-// 0. Mengambil data untuk Slides/Banner (misal: 5 film terbaru)
 $slides = [];
 $result_slides = mysqli_query($con, $base_movie_query . " ORDER BY m.created_at DESC LIMIT 5");
 if ($result_slides) {
@@ -61,38 +52,38 @@ if ($result_slides) {
         $slides[] = $row;
     }
 }
-// ##################################################################
 
 
-// 1. Mengambil film "Hot Minggu Ini" (berdasarkan rating) - (TIDAK DIUBAH)
+
+
 $hot_movies = [];
 $result_hot = mysqli_query($con, $base_movie_query . " ORDER BY m.rating DESC LIMIT 10");
 if ($result_hot) {
     while($row = mysqli_fetch_assoc($result_hot)) { $hot_movies[] = $row; }
 }
 
-// 2. Mengambil film "Terpopuler" (berdasarkan views) - (TIDAK DIUBAH)
+
 $popular_movies = [];
 $result_popular = mysqli_query($con, $base_movie_query . " ORDER BY m.view_count DESC LIMIT 10");
 if ($result_popular) {
     while($row = mysqli_fetch_assoc($result_popular)) { $popular_movies[] = $row; }
 }
 
-// 3. Mengambil film "Terbaru" - (TIDAK DIUBAH)
+
 $latest_movies = [];
 $result_latest = mysqli_query($con, $base_movie_query . " ORDER BY m.created_at DESC LIMIT 10");
 if ($result_latest) {
     while($row = mysqli_fetch_assoc($result_latest)) { $latest_movies[] = $row; }
 }
 
-// 4. Mengambil film "VIP" - (TIDAK DIUBAH)
+
 $vip_movies = [];
 $result_vip = mysqli_query($con, $base_movie_query . " WHERE m.is_vip = 1 ORDER BY m.created_at DESC LIMIT 10");
 if ($result_vip) {
     while($row = mysqli_fetch_assoc($result_vip)) { $vip_movies[] = $row; }
 }
 
-// 5. Mengambil "Rekomendasi Spesial" (contoh: rating tertinggi juga) - (TIDAK DIUBAH)
+
 $special_recommendations = [];
 $result_recs = mysqli_query($con, $base_movie_query . " ORDER BY m.rating DESC LIMIT 5");
 if ($result_recs) {
@@ -100,17 +91,17 @@ if ($result_recs) {
 }
 
 
-// BAGIAN 4: MENGGABUNGKAN SEMUA DATA DALAM SATU RESPON
+
 $response_data = [
-    // Data untuk MainActivity
-    'slides' => $slides,                                   // <-- PERBAIKAN: SEKARANG TERISI DATA
+    
+    'slides' => $slides,                                   
     'hot_movies' => $hot_movies,
     'popular_movies' => $popular_movies,
     'latest_movies' => $latest_movies,
     'vip_movies' => $vip_movies,
     'special_recommendations' => $special_recommendations,
 
-    // Data untuk Filter di SearchActivity
+    
     'genres' => $genres,
     'categories' => $categories,
     'years' => $years,

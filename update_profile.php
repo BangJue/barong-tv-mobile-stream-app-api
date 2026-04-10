@@ -1,5 +1,5 @@
 <?php
-// File: update_profile.php
+
 error_reporting(0);
 ini_set('display_errors', 0);
 
@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if (!empty($user_id) && !empty($name) && !empty($email)) {
         
-        // Update Nama & Email
+        
         $sql = "UPDATE users SET name = '$name', email = '$email' WHERE id = '$user_id'";
         
         if (mysqli_query($con, $sql)) {

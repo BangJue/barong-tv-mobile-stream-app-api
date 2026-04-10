@@ -1,5 +1,5 @@
 <?php
-require_once 'db_connect.php'; // Sesuaikan dengan file koneksi kamu
+require_once 'db_connect.php'; 
 header('Content-Type: application/json');
 
 $method = $_SERVER['REQUEST_METHOD'];
@@ -12,7 +12,7 @@ if ($method == 'POST') {
         exit();
     }
 
-    // Update user jadi VIP (set is_vip = 1)
+    
     $query = "UPDATE users SET is_vip = 1 WHERE id = '$user_id'";
     
     if (mysqli_query($con, $query)) {

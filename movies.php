@@ -1,9 +1,4 @@
 <?php
-/*
- * File: movies.php
- * PERBAIKAN DEFINITIF - 100% Cocok dengan DB Terbaru Anda.
- * - Menggunakan 'view_count' dan memfilter berdasarkan SEMUA _id.
- */
 
 require_once('koneksi.php');
 require_once('helpers.php');
@@ -16,7 +11,6 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     sendResponse(false, 'Metode request salah, seharusnya POST.');
 }
 
-// BAGIAN 1: QUERY DASAR (Sama seperti get_home.php)
 $query = "
     SELECT
         m.*,
@@ -36,7 +30,7 @@ $query = "
 $params = [];
 $types = "";
 
-// BAGIAN 2: LOGIKA FILTER
+
 if (isset($_POST['search']) && !empty($_POST['search'])) {
     $search_term = '%' . $_POST['search'] . '%';
     $query .= " AND m.title LIKE ?";
@@ -72,7 +66,7 @@ if (isset($_POST['is_vip']) && $_POST['is_vip'] == '1') {
     $query .= " AND m.is_vip = 1";
 }
 
-// BAGIAN 3: LOGIKA SORTING
+
 $orderBy = " ORDER BY m.created_at DESC";
 if (isset($_POST['sort'])) {
     switch ($_POST['sort']) {
@@ -80,7 +74,7 @@ if (isset($_POST['sort'])) {
             $orderBy = " ORDER BY m.rating DESC";
             break;
         case 'views':
-            $orderBy = " ORDER BY m.view_count DESC"; // Menggunakan view_count
+            $orderBy = " ORDER BY m.view_count DESC"; 
             break;
         case 'latest':
             break;
@@ -88,7 +82,7 @@ if (isset($_POST['sort'])) {
 }
 $query .= $orderBy;
 
-// BAGIAN 4: EKSEKUSI QUERY
+
 $stmt = mysqli_prepare($con, $query);
 if (!$stmt) { sendResponse(false, "Query prepare gagal: " . mysqli_error($con)); }
 if (!empty($params)) { mysqli_stmt_bind_param($stmt, $types, ...$params); }
@@ -100,9 +94,9 @@ $movies = [];
 while ($row = mysqli_fetch_assoc($result)) {
     $current_movie_id = $row['id'];
 
-    // ====================================================================
-    // ## INI PERBAIKAN UTAMA: Mengganti alias 'avg_rating' menjadi 'rating' ##
-    // ====================================================================
+    
+    
+    
     $rating_query = "SELECT AVG(user_rating) as rating, COUNT(user_rating) as rating_count FROM reviews WHERE movie_id = ? AND user_rating > 0";
     $rating_stmt = mysqli_prepare($con, $rating_query);
     mysqli_stmt_bind_param($rating_stmt, "i", $current_movie_id);
@@ -111,10 +105,10 @@ while ($row = mysqli_fetch_assoc($result)) {
     $rating_data = mysqli_fetch_assoc($rating_result);
     mysqli_stmt_close($rating_stmt);
 
-    // Sisipkan hasil perhitungan ke dalam data film
-    $row['rating'] = (float)($rating_data['rating'] ?? 0); // <-- Sekarang menggunakan 'rating'
+    
+    $row['rating'] = (float)($rating_data['rating'] ?? 0); 
     $row['rating_count'] = (int)($rating_data['rating_count'] ?? 0);
-    // ====================================================================
+    
 
     $movies[] = $row;
 }
