@@ -65,25 +65,45 @@ Frontend (Mobile App):
 ## 📁 Project Structure
 
 /uploads
+</br>
 /add_rating.php
+</br>
 /add_review.php
+</br>
 /auth.php
+</br>
 /bookmark_manager.php
+</br>
 /change_password.php
+</br>
 /download_manager.php
+</br>
 /get_home.php
+</br>
 /get_movies.php
+</br>
 /get_recommendations.php
+</br>
 /get_reviews.php
+</br>
 /get_user.php
+</br>
 /helpers.php
+</br>
 /koneksi.php
+</br>
 /manage_bookmark.php
+</br>
 /movies.php
+</br>
 /reviews.php
+</br>
 /update_photo.php
+</br>
 /update_profile.php
+</br>
 /user_action.php
+</br>
 /vip_purchases.php
 
 ---
