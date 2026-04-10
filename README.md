@@ -25,8 +25,8 @@ It provides endpoints for:
 * Movie streaming data
 * Reviews and ratings
 * Bookmarks and watch history
-* Download tracking
-* VIP access system
+* Download tracking (Unfinished)
+* VIP access system (Unfinished)
 
 This project is suitable for **learning**, **API integration**, and **portfolio showcase**.
 
@@ -45,9 +45,9 @@ Frontend (Mobile App):
 * 👤 Authentication & profile management
 * ⭐ Reviews & ratings system
 * 🔖 Bookmark system
-* 📥 Download tracking
+* 📥 Download tracking (Unfinished)
 * 🕒 Watch history
-* 💎 VIP content system
+* 💎 VIP content system (Unfinished)
 
 ---
 
